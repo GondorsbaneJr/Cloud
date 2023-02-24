@@ -17,5 +17,13 @@
   "author": "GondorsbaneJr#5799",
   "license": "ISC",
   "keywords": [],
-  "description": ""
+  "description": "## this uses the [discord.js](https://discord.js.org/#/) library",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Scattered-Omega/Project_Cloud.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Scattered-Omega/Project_Cloud/issues"
+  },
+  "homepage": "https://github.com/Scattered-Omega/Project_Cloud#readme"
 }

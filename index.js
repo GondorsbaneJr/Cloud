@@ -2,6 +2,7 @@ require('dotenv').config();
 const { prefix } = require('./config.json');
 const { Client, Intents, Collection, GatewayIntentBits } = require('discord.js');
 const Discord = require('discord.js');
+const ytdl = require('ytdl-core');
 const bot = new Client({ 
     intents: [
         GatewayIntentBits.GUILDS,
