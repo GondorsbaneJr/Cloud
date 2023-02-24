@@ -2,7 +2,7 @@ module.exports = {
     config: {
         name: 'ban',
         description: 'Ban a user',
-        usage: `!ban <user> <reason>`,
+        usage: `-ban <user> <reason>`,
         accessableby: 'Moderators',
         aliases: ['b']
     },

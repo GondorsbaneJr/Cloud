@@ -7,7 +7,8 @@ const bot = new Client({
         Intents.FLAGS.GUILDS, 
         Intents.FLAGS.GUILD_MESSAGES,
         Intents.FLAGS.GUILD_MEMBERS
-    ] 
+    ],
+    partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 });
 
 const fs = require("fs");
@@ -49,6 +50,13 @@ bot.on("messageCreate", async message => {
     let commandfile = bot.commands.get(cmd.slice(prefix.length));
     if(commandfile) commandfile.run(bot,message,args);
 
+});
+
+// multiple activity status 
+bot.on('ready', () => {
+    console.log(`${bot.user.username} is online!`);
+    bot.user.setActivity('-help', { type: 'LISTENING' });
+    bot.user.setStatus('dnd');
 });
 
 // login via .env file

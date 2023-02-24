@@ -1,0 +1,8 @@
+version: '3'
+services:
+  bot:
+    build: .
+    volumes:
+      - .:/app
+    environment:
+      - TOKEN=your_discord_bot_token
