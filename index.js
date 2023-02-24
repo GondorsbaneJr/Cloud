@@ -1,12 +1,25 @@
 require('dotenv').config();
 const { prefix } = require('./config.json');
-const { Client, Intents, Collection } = require('discord.js');
+const { Client, Intents, Collection, GatewayIntentBits } = require('discord.js');
 const Discord = require('discord.js');
 const bot = new Client({ 
     intents: [
-        Intents.FLAGS.GUILDS, 
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_MEMBERS
+        GatewayIntentBits.GUILDS,
+        GatewayIntentBits.GUILD_MEMBERS,
+        GatewayIntentBits.GUILD_BANS,
+        GatewayIntentBits.GUILD_EMOJIS_AND_STICKERS,
+        GatewayIntentBits.GUILD_INTEGRATIONS,
+        GatewayIntentBits.GUILD_WEBHOOKS,
+        GatewayIntentBits.GUILD_INVITES,
+        GatewayIntentBits.GUILD_VOICE_STATES,
+        GatewayIntentBits.GUILD_PRESENCES,
+        GatewayIntentBits.GUILD_MESSAGES,
+        GatewayIntentBits.GUILD_MESSAGE_REACTIONS,
+        GatewayIntentBits.GUILD_MESSAGE_TYPING,
+        GatewayIntentBits.DIRECT_MESSAGES,
+        GatewayIntentBits.DIRECT_MESSAGE_REACTIONS,
+        GatewayIntentBits.DIRECT_MESSAGE_TYPING,
+        GatewayIntentBits.GUILD_PRESENCES
     ],
     partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 });
@@ -49,8 +62,29 @@ bot.on("messageCreate", async message => {
     //Get the command from the commands collection and then if the command is found run the command file
     let commandfile = bot.commands.get(cmd.slice(prefix.length));
     if(commandfile) commandfile.run(bot,message,args);
-
 });
+
+bot.on('interactionCreate', async interaction => {
+    if (!interaction.isCommand()) return;
+
+    const command = bot.commands.get(interaction.commandName);
+
+    if (!command) return;
+
+    try {
+        await command.execute(interaction);
+    } catch (error) {
+        console.error(error);
+        await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+    }
+});
+
+bot.on('guildMemverAdd', member => {
+    const channel = member.guild.channels.cache.find(ch => ch.name === 'welcome');
+    if (!channel) return;
+    channel.send(`Welcome to the server, ${member}`);
+})
+
 
 // multiple activity status 
 bot.on('ready', () => {
