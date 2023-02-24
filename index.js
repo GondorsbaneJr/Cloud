@@ -3,6 +3,7 @@ const { prefix } = require('./config.json');
 const { Client, Intents, Collection, GatewayIntentBits } = require('discord.js');
 const Discord = require('discord.js');
 const ytdl = require('ytdl-core');
+const { setupMusicCommands } = require('./commands/musicCommands.js');
 const bot = new Client({ 
     intents: [
         GatewayIntentBits.GUILDS,
@@ -93,6 +94,8 @@ bot.on('ready', () => {
     bot.user.setActivity('-help', { type: 'LISTENING' });
     bot.user.setStatus('dnd');
 });
+
+setupMusicCommands(client, prefix);
 
 // login via .env file
 bot.login(process.env.TOKEN);
