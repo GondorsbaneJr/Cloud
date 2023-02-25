@@ -97,5 +97,4 @@ bot.on('ready', () => {
 
 setupMusicCommands(client, prefix);
 
-// login via .env file
-bot.login(process.env.TOKEN);
+// login via config.json
