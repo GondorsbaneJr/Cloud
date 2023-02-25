@@ -1,10 +1,11 @@
 require('dotenv').config();
-const { prefix } = require('./config.json');
-const { Client, Intents, Collection, GatewayIntentBits } = require('discord.js');
+const { prefix, token, guildId, clientId } = require('./config.json');
+const { Client, Events, Collection, GatewayIntentBits } = require('discord.js');
 const Discord = require('discord.js');
 const ytdl = require('ytdl-core');
 const { setupMusicCommands } = require('./commands/musicCommands.js');
-const bot = new Client({ 
+const { PermissionsBitField } = require('discord.js');
+const client = new Discord.Client({ 
     intents: [
         GatewayIntentBits.GUILDS,
         GatewayIntentBits.GUILD_MEMBERS,
@@ -27,15 +28,74 @@ const bot = new Client({
 });
 
 const fs = require("fs");
+const path = require('node:path');
 
-bot.commands = new Collection();
+client.commands = new Collection();
 
-const commandFiles = fs.readdirSync('./commands/').filter(f => f.endsWith('.js'))
+const commandsPath = path.join(__dirname, 'commands');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
 for (const file of commandFiles) {
-    const props = require(`./commands/${file}`)
-    console.log(`${file} loaded`)
-    bot.commands.set(props.config.name, props)
+	const filePath = path.join(commandsPath, file);
+	const command = require(filePath);
+	// Set a new item in the Collection with the key as the command name and the value as the exported module
+	if ('data' in command && 'execute' in command) {
+		client.commands.set(command.data.name, command);
+	} else {
+		console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+	}
 }
+
+const commands = [];
+
+// Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	commands.push(command.data.toJSON());
+}
+
+// Construct and prepare an instance of the REST module
+const rest = new REST({ version: '10' }).setToken(token);
+
+// and deploy your commands!
+(async () => {
+	try {
+		console.log(`Started refreshing ${commands.length} application (/) commands.`);
+
+		// The put method is used to fully refresh all commands in the guild with the current set
+		const data = await rest.put(
+			Routes.applicationGuildCommands(clientId, guildId),
+			{ body: commands },
+		);
+
+		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+	} catch (error) {
+		// And of course, make sure you catch and log any errors!
+		console.error(error);
+	}
+})();
+
+client.on(Events.InteractionCreate, async interaction => {
+	if (!interaction.isChatInputCommand()) return;
+
+	const command = interaction.client.commands.get(interaction.commandName);
+
+	if (!command) {
+		console.error(`No command matching ${interaction.commandName} was found.`);
+		return;
+	}
+
+	try {
+		await command.execute(interaction);
+	} catch (error) {
+		console.error(error);
+		if (interaction.replied || interaction.deferred) {
+			await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
+		} else {
+			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+		}
+	}
+});
 
 const commandSubFolders = fs.readdirSync('./commands/').filter(f => !f.endsWith('.js'))
 
@@ -44,13 +104,13 @@ commandSubFolders.forEach(folder => {
     for (const file of commandFiles) {
         const props = require(`./commands/${folder}/${file}`)
         console.log(`${file} loaded from ${folder}`)
-        bot.commands.set(props.config.name, props)
+        client.commands.set(props.config.name, props)
     }
 });
 
-bot.on("messageCreate", async message => {
-    //Check if author is a bot or the message was sent in dms and return
-    if(message.author.bot) return;
+client.on("messageCreate", async message => {
+    //Check if author is a client or the message was sent in dms and return
+    if(message.author.client) return;
     if(message.channel.type === "dm") return;
 
     //get prefix from config and prepare message so it can be read as a command
@@ -62,14 +122,14 @@ bot.on("messageCreate", async message => {
     if(!cmd.startsWith(prefix)) return;
 
     //Get the command from the commands collection and then if the command is found run the command file
-    let commandfile = bot.commands.get(cmd.slice(prefix.length));
-    if(commandfile) commandfile.run(bot,message,args);
+    let commandfile = client.commands.get(cmd.slice(prefix.length));
+    if(commandfile) commandfile.run(client,message,args);
 });
 
-bot.on('interactionCreate', async interaction => {
+client.on('interactionCreate', async interaction => {
     if (!interaction.isCommand()) return;
 
-    const command = bot.commands.get(interaction.commandName);
+    const command = client.commands.get(interaction.commandName);
 
     if (!command) return;
 
@@ -81,7 +141,7 @@ bot.on('interactionCreate', async interaction => {
     }
 });
 
-bot.on('guildMemverAdd', member => {
+client.on('guildMemverAdd', member => {
     const channel = member.guild.channels.cache.find(ch => ch.name === 'welcome');
     if (!channel) return;
     channel.send(`Welcome to the server, ${member}`);
@@ -89,12 +149,11 @@ bot.on('guildMemverAdd', member => {
 
 
 // multiple activity status 
-bot.on('ready', () => {
-    console.log(`${bot.user.username} is online!`);
-    bot.user.setActivity('-help', { type: 'LISTENING' });
-    bot.user.setStatus('dnd');
+client.on('ready', () => {
+    console.log(`${client.user.username} is online!`);
 });
 
 setupMusicCommands(client, prefix);
 
 // login via config.json
+client.login(token);

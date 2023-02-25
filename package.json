@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "bitfield": "^4.1.0",
     "body-parser": "^1.20.2",
     "discord.js": "^14.7.1",
     "discord.js-musicbot-addon": "^13.9.1",
