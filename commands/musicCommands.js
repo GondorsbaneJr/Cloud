@@ -54,5 +54,135 @@ module.exports = {
         music.playFunction(message, args.join(' '));
       }
     });
+    client.on('message', async (message) => {
+      if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+      const args = message.content.slice(prefix.length).trim().split(/ +/);
+      const command = args.shift().toLowerCase();
+
+      if (command === 'skip') {
+        music.skipFunction(message, args.join(' '));
+      }
+    });
+    client.on('message', async (message) => {
+      if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+      const args = message.content.slice(prefix.length).trim().split(/ +/);
+      const command = args.shift().toLowerCase();
+
+      if (command === 'stop') {
+        music.stopFunction(message, args.join(' '));
+      }
+    });
+    client.on('message', async (message) => {
+      if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+      const args = message.content.slice(prefix.length).trim().split(/ +/);
+      const command = args.shift().toLowerCase();
+
+      if (command === 'volume') {
+        music.volumeFunction(message, args.join(' '));
+      }
+    });
+    client.on('message', async (message) => {
+      if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+      const args = message.content.slice(prefix.length).trim().split(/ +/);
+      const command = args.shift().toLowerCase();
+
+      if (command === 'leave') {
+        music.leaveFunction(message, args.join(' '));
+      }
+    });
+    client.on('message', async (message) => {
+      if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+      const args = message.content.slice(prefix.length).trim().split(/ +/);
+      const command = args.shift().toLowerCase();
+
+      if (command === 'pause') {
+        music.pauseFunction(message, args.join(' '));
+      }
+    });
+    client.on('message', async (message) => {
+      if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+      const args = message.content.slice(prefix.length).trim().split(/ +/);
+      const command = args.shift().toLowerCase();
+
+      if (command === 'resume') {
+        music.resumeFunction(message, args.join(' '));
+      }
+    });
+    client.on('message', async (message) => {
+      if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+      const args = message.content.slice(prefix.length).trim().split(/ +/);
+      const command = args.shift().toLowerCase();
+
+      if (command === 'loop') {
+        music.loopFunction(message, args.join(' '));
+      }
+    });
+    client.on('message', async (message) => {
+      if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+      const args = message.content.slice(prefix.length).trim().split(/ +/);
+      const command = args.shift().toLowerCase();
+
+      if (command === 'enablequeue') {
+        music.enableQueueFunction(message, args.join(' '));
+      }
+    });
+    client.on('message', async (message) => {
+      if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+      const args = message.content.slice(prefix.length).trim().split(/ +/);
+      const command = args.shift().toLowerCase();
+
+      if (command === 'disablequeue') {
+        music.disableQueueFunction(message, args.join(' '));
+      }
+    });
+    client.on('message', async (message) => {
+      if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+      const args = message.content.slice(prefix.length).trim().split(/ +/);
+      const command = args.shift().toLowerCase();
+
+      if (command === 'queue') {
+        music.queueFunction(message, args.join(' '));
+      }
+    });
+    client.on('message', async (message) => {
+      if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+      const args = message.content.slice(prefix.length).trim().split(/ +/);
+      const command = args.shift().toLowerCase();
+
+      if (command === 'np') {
+        music.npFunction(message, args.join(' '));
+      }
+    });
+    client.on('message', async (message) => {
+      if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+      const args = message.content.slice(prefix.length).trim().split(/ +/);
+      const command = args.shift().toLowerCase();
+
+      if (command === 'scsearch') {
+        music.scSearchFunction(message, args.join(' '));
+      }
+    });
+    client.on('message', async (message) => {
+      if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+      const args = message.content.slice(prefix.length).trim().split(/ +/);
+      const command = args.shift().toLowerCase();
+
+      if (command === 'autoplay') {
+        music.autoplayFunction(message, args.join(' '));
+      }
+    });
   },
 };

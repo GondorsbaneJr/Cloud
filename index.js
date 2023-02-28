@@ -153,9 +153,6 @@ client.on('ready', () => {
     console.log(`${client.user.username} is online!`);
     console.log(`Logged in as ${client.user.tag}!`);
     client.user.setActivity('-help', { type: 'LISTENING' });
-    setInterval(() => {
-        client.user.setActivity('-help', { type: 'LISTENING' });
-    }, 10000);
 });
 
 setupMusicCommands(client, prefix);
