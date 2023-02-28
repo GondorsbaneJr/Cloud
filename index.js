@@ -5,7 +5,7 @@ const Discord = require('discord.js');
 const ytdl = require('ytdl-core');
 const { setupMusicCommands } = require('./commands/musicCommands.js');
 const { PermissionsBitField } = require('discord.js');
-const client = new Discord.Client({ 
+const client = new Client({
     intents: [
         GatewayIntentBits.GUILDS,
         GatewayIntentBits.GUILD_MEMBERS,
@@ -151,6 +151,11 @@ client.on('guildMemverAdd', member => {
 // multiple activity status 
 client.on('ready', () => {
     console.log(`${client.user.username} is online!`);
+    console.log(`Logged in as ${client.user.tag}!`);
+    client.user.setActivity('-help', { type: 'LISTENING' });
+    setInterval(() => {
+        client.user.setActivity('-help', { type: 'LISTENING' });
+    }, 10000);
 });
 
 setupMusicCommands(client, prefix);
