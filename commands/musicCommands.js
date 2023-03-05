@@ -1,9 +1,10 @@
 const { MusicBot } = require('discord.js-musicbot-addon');
 
+
 module.exports = {
   setupMusicCommands: (client, prefix) => {
     const music = new MusicBot({
-      youtubeKey: 'YOUR_YOUTUBE_API_KEY',
+      youtubeKey: (process.env.YOUTUBE_API_KEY),
       botPrefix: prefix,
       botClient: client,
       maxQueueSize: 50,

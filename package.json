@@ -16,8 +16,8 @@
     "typescript": "^4.9.5",
     "ytdl-core": "^4.11.2"
   },
-  "name": "bots",
-  "version": "1.0.0",
+  "name": "cloud",
+  "version": "2.0.0",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

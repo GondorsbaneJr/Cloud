@@ -6,5 +6,7 @@ module.exports = {
 
         //Find a channel named welcome and send a Welcome message
         member.guild.channels.cache.find(c => c.name === "welcome").send('Welcome '+ member.user.username)
+        //gives them member role
+        member.roles.add('1076765183785062420')
     }
 }
